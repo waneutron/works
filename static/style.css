@@ -1,0 +1,35 @@
+body {
+  background-image: url('background.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center center;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.table th,
+.table td {
+  vertical-align: middle !important;
+}
+
+.table td {
+  color: #333;
+}
+
+h1 {
+  color: #ffffff;
+  text-shadow: 1px 1px 2px #00000088;
+}
+
+/* Make form and button section responsive */
+@media (max-width: 768px) {
+  .d-flex.flex-md-row {
+    flex-direction: column !important;
+  }
+}
+
+/* Optional: Button hover animation */
+.btn:hover {
+  opacity: 0.9;
+  transition: all 0.2s ease-in-out;
+}

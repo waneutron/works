@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <title>Sistem Rekod Fail</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Bootstrap Icons (optional but makes UI modern) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="container py-5">
+  <h1 class="mb-4 text-center text-white display-5">📚 Sistem Rekod Fail</h1>
+
+  <!-- Search and Add Button -->
+  <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4">
+    <input type="text" id="searchBox" class="form-control mb-2 mb-md-0 me-md-2" placeholder="🔍 Cari tajuk, penulis, atau rujukan..." />
+    <a href="/add" class="btn btn-success">
+      <i class="bi bi-plus-circle"></i> Tambah Rekod
+    </a>
+  </div>
+
+  <!-- Record Table -->
+  <div class="table-responsive">
+    <table class="table table-hover table-bordered align-middle bg-white shadow-sm rounded" id="recordTable">
+      <thead class="table-dark text-center">
+        <tr>
+          <th>ID</th>
+          <th>Tajuk</th>
+          <th>Penulis</th>
+          <th>Rujukan</th>
+          <th>Bilangan</th>
+          <th>Tingkat</th>
+          <th>Almari</th>
+          <th>Bahagian</th>
+          <th>Tindakan</th>
+        </tr>
+      </thead>
+      <tbody id="recordBody">
+        {% for book in books %}
+        <tr>
+          <td class="text-center">{{ book.id }}</td>
+          <td>{{ book.title }}</td>
+          <td>{{ book.author }}</td>
+          <td>{{ book.isbn }}</td>
+          <td class="text-center">{{ book.quantity }}</td>
+          <td>{{ book.room }}</td>
+          <td>{{ book.shelf }}</td>
+          <td>{{ book.section }}</td>
+          <td class="text-center">
+            <a href="/edit/{{ book.id }}" class="btn btn-warning btn-sm me-1"><i class="bi bi-pencil-square"></i></a>
+            <form action="/delete/{{ book.id }}" method="post" style="display:inline;" onsubmit="return confirm('Adakah anda pasti mahu padam rekod ini?');">
+              <button type="submit" class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  const searchBox = document.getElementById('searchBox');
+  const recordBody = document.getElementById('recordBody');
+
+  searchBox.addEventListener('input', async function() {
+    const query = this.value;
+
+    const response = await fetch(`/search?q=${encodeURIComponent(query)}`);
+    const data = await response.json();
+
+    recordBody.innerHTML = '';
+
+    if (data.length === 0) {
+      recordBody.innerHTML = '<tr><td colspan="9" class="text-center text-muted">Tiada rekod dijumpai</td></tr>';
+      return;
+    }
+
+    data.forEach(book => {
+      const row = `
+        <tr>
+          <td class="text-center">${book.id}</td>
+          <td>${book.title}</td>
+          <td>${book.author}</td>
+          <td>${book.isbn}</td>
+          <td class="text-center">${book.quantity}</td>
+          <td>${book.room}</td>
+          <td>${book.shelf}</td>
+          <td>${book.section}</td>
+          <td class="text-center">
+            <a href="/edit/${book.id}" class="btn btn-warning btn-sm me-1"><i class="bi bi-pencil-square"></i></a>
+            <a href="/delete/${book.id}" class="btn btn-danger btn-sm" onclick="return confirm('Adakah anda pasti mahu padam rekod ini?');">
+              <i class="bi bi-trash"></i>
+            </a>
+          </td>
+        </tr>`;
+      recordBody.innerHTML += row;
+    });
+  });
+</script>
+</body>
+</html>
