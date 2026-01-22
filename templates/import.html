@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <title>Import Excel - Sistem Rekod Fail</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow-lg">
+        <div class="card-header bg-info text-white">
+          <h3 class="mb-0">
+            <i class="bi bi-file-earmark-excel"></i> Import Rekod dari Excel
+          </h3>
+        </div>
+        <div class="card-body">
+          <p class="text-muted mb-4">
+            Muat naik fail Excel (.xlsx atau .xls) untuk mengimport rekod dalam jumlah besar.
+          </p>
+
+          <!-- Format Instructions -->
+          <div class="alert alert-warning" role="alert">
+            <h6 class="alert-heading"><i class="bi bi-exclamation-triangle"></i> Format Fail Excel</h6>
+            <p class="mb-2">Pastikan fail Excel anda mengikuti format ini:</p>
+            <ul class="mb-0 small">
+              <li><strong>row A:</strong> Tajuk</li>
+              <li><strong>row B:</strong> Nama Fail (Author)</li>
+              <li><strong>row C:</strong> Rujukan (ISBN)</li>
+              <li><strong>row D:</strong> Bilangan (Quantity)</li>
+              <li><strong>row E:</strong> Tingkat (Room)</li>
+              <li><strong>row F:</strong> Almari (Shelf)</li>
+              <li><strong>row G:</strong> Bahagian (Section)</li>
+            </ul>
+          </div>
+
+          <form method="POST" enctype="multipart/form-data" id="importForm">
+            <div class="mb-3">
+              <label for="fileInput" class="form-label">Pilih Fail Excel</label>
+              <input type="file" class="form-control" id="fileInput" name="file" accept=".xlsx,.xls" required>
+              <small class="text-muted">Saiz maksimum: 16 MB</small>
+            </div>
+
+            <div class="d-grid gap-2 d-md-flex justify-content-md-between">
+              <a href="/" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Kembali
+              </a>
+              <button type="submit" class="btn btn-success">
+                <i class="bi bi-upload"></i> Import
+              </button>
+            </div>
+          </form>
+
+          <!-- Sample template link -->
+          <hr>
+          <p class="text-center text-muted small">
+            <strong>Tip:</strong> Anda boleh membuat fail template Excel dengan maklumat dalam format di atas.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  document.getElementById('importForm').addEventListener('submit', function() {
+    const fileInput = document.getElementById('fileInput');
+    const fileName = fileInput.files[0]?.name || '';
+    
+    if (!fileName.match(/\.(xlsx|xls)$/i)) {
+      alert('Sila pilih fail Excel yang sah (.xlsx atau .xls)');
+      return false;
+    }
+  });
+</script>
+</body>
+</html>
